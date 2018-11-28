@@ -128,7 +128,7 @@
 				?>
 			</tbody>
 		</table>
-		<a class="button" href="/AirlineDMBS//AirlineDBMS/booking.php?sid=<?php echo $sid?>&seatno=<?php echo $row["seat_no"]?>">Book</a>
+		<a class="button" href="/AirlineDMBS/AirlineDBMS/booking.php?sid=<?php echo $sid?>&seatno=<?php echo $row["seat_no"]?>">Book</a>
 	</div>
 	</div>
 </div>
