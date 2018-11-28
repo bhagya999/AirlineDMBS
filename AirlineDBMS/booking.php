@@ -26,7 +26,12 @@
 	$seatno = $_GET['seatno'];
 	$items = $_SESSION['cart'];
 	$seats = explode(",", $items);
+	?>
+	<form action="submitdetails.php" method="POST">
+	<?php
+	$i=0;
 	foreach ($seats as $key=>$id) {
+		$i+=1;
 		$database = new DbConnect();	
 		$databaseconnect = $database->connect();
 		$query = " SELECT * FROM flight_scheduler,flight where scheduler_id = $sid and flight_scheduler.flight_id = flight.flight_id";
@@ -36,29 +41,31 @@
 			$ticket_value=$row["ticket_value"];
 		}
 		?>
-		<label for="seat_no_label"><b>Seat No:</b></label>
-		<input align="center" type="text" name="seat_no" value="<?php echo $id ?>"readonly>
-		<br><br>
+		<h3>Seat No:<?php echo $id  ?></h3>
 		<label for="passport"><b>Passport ID:</b></label>
-		<input align="center" type="text" name="passport"> 
+		<input align="center" type="text" name="passport<?php echo $i;?>"> 
 		<br><br>
 		<label for="firstname"><b>First Name:</b></label>
-		<input align="center" type="text" name="firstname"> 
+		<input align="center" type="text" name="firstname<?php echo $i;?>"> 
 		<br><br>
 		<label for="lastname"><b>Last Name:</b></label>
-		<input align="center" type="text" name="lastname"> 
+		<input align="center" type="text" name="lastname<?php echo $i;?>"> 
 		<br><br>
 		<label for="age"><b>Age:</b></label>
-		<input align="center" type="text" name="age"> 
+		<input align="center" type="text" name="age<?php echo $i;?>"> 
 		<br><br>
 		<label for="ticketvalue"><b>Ticket Value(Economy):</b></label>
 		<input type="text" name="ticket_value" value="<?php echo $ticket_value?>" readonly>
-		<br><br>
-
-	<?php 
+		<br><br><br>
+	<?php
 	}
-	
 	?>
+	<label for="ticketamount"><b>Number of Tickets:</b></label>
+		<input type="text" name="ticketamount" value="<?php echo $i?>" readonly>
+		<br><br><br>
+		<button class="mainbutton" type= "submit">Submit</button>
+	</form>
+	
 	<br>
 	<br>
 
