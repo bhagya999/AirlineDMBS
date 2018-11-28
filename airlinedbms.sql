@@ -397,7 +397,7 @@ DELIMITER ;
 
 CREATE TABLE `package` (
   `package_type` varchar(10) NOT NULL,
-  `discount percentage` double NOT NULL,
+  `discount_percentage` double NOT NULL,
   `description` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -405,7 +405,7 @@ CREATE TABLE `package` (
 -- Dumping data for table `package`
 --
 
-INSERT INTO `package` (`package_type`, `discount percentage`, `description`) VALUES
+INSERT INTO `package` (`package_type`, `discount_percentage`, `description`) VALUES
 ('Frequent', 5, 'This is about frequent class customers'),
 ('Gold', 9, 'This is about gold class customers'),
 ('Guest', 0, 'this is about guest class customers');
@@ -415,7 +415,7 @@ DELIMITER $$
 CREATE TRIGGER `before_package_insert` BEFORE INSERT ON `package` FOR EACH ROW BEGIN
   declare msg1 varchar(128);
   
-  IF new.discount_percentage <=0  or new.discount_percentage>100 THEN
+  IF (new.discount_percentage <=0  or new.discount_percentage>100 )THEN
     set msg1 = "Invalid discount_percentage";
     signal sqlstate '45000' set message_text = msg1;
   end if;
