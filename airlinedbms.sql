@@ -1,17 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
--- https://www.phpmyadmin.net/
+-- version 4.5.1
+-- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 27, 2018 at 04:01 PM
--- Server version: 10.1.36-MariaDB
--- PHP Version: 7.2.11
-CREATE DATABASE airlinedbms;
-USE airlinedbms;
+-- Generation Time: Nov 28, 2018 at 02:54 PM
+-- Server version: 10.1.13-MariaDB
+-- PHP Version: 5.6.20
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -155,6 +151,37 @@ INSERT INTO `class` (`class_type`, `class_name`, `description`, `additional_char
 (3, 'Premium Economy Clas', 'Slightly better Economy Class seating ', 30),
 (4, 'Economy Class', 'Basic accommodation, commonly purchased by leisure travelers', 0);
 
+--
+-- Triggers `class`
+--
+DELIMITER $$
+CREATE TRIGGER `before_class_insert` BEFORE INSERT ON `class` FOR EACH ROW BEGIN
+	declare msg varchar(128);
+  IF new.additional_charge<0  THEN
+  set msg = "Invalid additonal_charges";
+    signal sqlstate '45000' set message_text = msg;
+	end if;
+  IF new.class_type<=0  THEN
+  set msg = "Invalid class_type";
+    signal sqlstate '45000' set message_text = msg;
+	end if;
+  
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `before_class_update` BEFORE UPDATE ON `class` FOR EACH ROW BEGIN
+	declare msg varchar(128);
+  IF new.additional_charge<0  THEN
+  set msg = "Invalid additonal_charges";
+    signal sqlstate '45000' set message_text = msg;
+	end if;
+  
+  
+END
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -168,7 +195,7 @@ CREATE TABLE `customer` (
   `address` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `user_name` varchar(20) NOT NULL,
-  `password` varchar(20) NOT NULL,
+  `password` varchar(40) NOT NULL,
   `package_type` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -183,7 +210,45 @@ INSERT INTO `customer` (`customer_id`, `first_name`, `last_name`, `address`, `em
 (4, 'CustomerFirst4', 'CustomerLast4', 'CustomerAddress4', 'customer4@example.com', 'customerUser4', 'password', 'Frequent'),
 (5, 'CustomerFirst5', 'CustomerLast5', 'CustomerAddress5', 'customer5@example.com', 'customerUser5', 'password', 'Guest'),
 (6, 'CustomerFirst6', 'CustomerLast6', 'CustomerAddress6', 'customer6@example.com', 'customerUser6', 'password', 'Guest'),
-(7, 'Ravindu', 'Nuradha', '117/1,Maharagama.', 'nuradhamunasinghe@gmail.com', 'nuradha', '123456', 'Gold');
+(7, 'Ravindu', 'Nuradha', '117/1,Maharagama.', 'nuradhamunasinghe@gmail.com', 'nuradha', '123456', 'Gold'),
+(197, '1', 'Sh', '19/2', 'b@1.com', 'b9', '123', 'GOLD'),
+(198, 'bhagya', 'Sh', '19/2', 'b@1.com', 'b9', '123', 'GOLD'),
+(199, '1', 'sh', '19/2', 'b@1.com', 'b9', '123', 'GOLD'),
+(201, 'bhagya', 'sh', '19/2', 'b@1.com', 'b9', '123', 'GOLD'),
+(203, '1g', 'sh', '19/2', 'b@1.com', 'b9', '123', 'GOLD'),
+(204, '1', 'sh', '19/2', 'b@1.com', 'b9', '123', 'GOLD'),
+(299, '1', 'sh', '19/2', 'b@1.com', 'b9', '123', 'GOLD'),
+(300, '1', 'sh', '19/2', 'b@1.com', 'b9', '123', 'GOLD'),
+(1456, '1df', 'sh', '19/2', 'b@1.com', 'b', '6116afedcb0bc31083935c1c262ff4c9', 'GOLD');
+
+--
+-- Triggers `customer`
+--
+DELIMITER $$
+CREATE TRIGGER `before_customer_insert` BEFORE INSERT ON `customer` FOR EACH ROW BEGIN
+	declare msg varchar(128);
+  declare passwordtemp varchar(40);
+  IF NEW.`email` NOT LIKE '%_@%_.__%'  THEN
+  set msg = "Invalid Email";
+    signal sqlstate '45000' set message_text = msg;
+	end if;
+  IF new.first_name REGEXP '[^a-zA-Z]+$' THEN
+  set msg = "Invalid first_name";
+    signal sqlstate '45000' set message_text = msg;
+	end if;
+  IF new.last_name  REGEXP '[^a-zA-Z]+$' THEN
+  set msg = "Invalid last_name";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
+  IF new.user_name  REGEXP '[^a-zA-Z]+$' THEN
+  set msg = "Invalid user_name";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
+  set passwordtemp = md5(sha1(new.password));
+  set new.password = passwordtemp;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -264,7 +329,8 @@ INSERT INTO `flight_scheduler` (`scheduler_id`, `flight_id`, `flight_date`, `fli
 (18, 18, '2018-11-10', 'Not Delayed', '1'),
 (19, 19, '2018-11-10', 'Not Delayed', '6'),
 (20, 20, '2018-11-10', 'Not Delayed', '4'),
-(21, 12, '0000-00-00', 'Not Delayed', '6');
+(21, 12, '0000-00-00', 'Not Delayed', '6'),
+(100, 10, '2018-11-30', 'Not Delayed', '3');
 
 --
 -- Triggers `flight_scheduler`
@@ -746,13 +812,11 @@ ALTER TABLE `seat`
 --
 ALTER TABLE `booking`
   MODIFY `booking_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
 --
 -- AUTO_INCREMENT for table `flight`
 --
 ALTER TABLE `flight`
   MODIFY `flight_id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
-
 --
 -- Constraints for dumped tables
 --
@@ -803,7 +867,6 @@ ALTER TABLE `plane`
 ALTER TABLE `route`
   ADD CONSTRAINT `FK_flight_from` FOREIGN KEY (`flight_from`) REFERENCES `airport` (`airport_code`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_flight_to` FOREIGN KEY (`flight_to`) REFERENCES `airport` (`airport_code`) ON DELETE CASCADE ON UPDATE CASCADE;
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
