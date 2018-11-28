@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
 	<?php
+	session_start();
 		require 'databaseaccess.php';
 	?>
 	<title>
@@ -21,31 +22,12 @@
 
 <body>
 	<h1>Book </h1>
-	<?php $sid = $_GET['sid'];
+	<?php $sid = $_SESSION['scheduler_id'];
 	$seatno = $_GET['seatno'];
-	
-	?>
-	<br>
-	<br>
-
-	<form action="seatbooking.php?sid=<?php echo $sid?>" method="POST" >
-		<label for="scheduler_id_label"><b>Scheduler_ID:</b></label>
-		<input align="center" type="text" name="scheduler_id" value="<?php echo $sid ?>"readonly>
-		<br><br>
-		<label for="seat_no_label"><b>Seat No:</b></label>
-		<input align="center" type="text" name="seat_no" value="<?php echo $seatno ?>"readonly>
-		<br><br>
-		<label for="cid"><b>Customer ID:	</b></label>
-		<input type="text" name="customer_id"><br><br>
-		<label for="classtypelabel"><b>Class Type:</b></label>
-		<select name="classtype" >
-            <option value="1">First Class</option>
-            <option value="2">Business Class</option>
-            <option value="3" >Premium Economy Class</option>
-            <option value="4" >Economy</option>
-        </select><br><br>
-        <?php 	
-        $database = new DbConnect();	
+	$items = $_SESSION['cart'];
+	$seats = explode(",", $items);
+	foreach ($seats as $key=>$id) {
+		$database = new DbConnect();	
 		$databaseconnect = $database->connect();
 		$query = " SELECT * FROM flight_scheduler,flight where scheduler_id = $sid and flight_scheduler.flight_id = flight.flight_id";
 		$result = mysqli_query($databaseconnect,$query);
@@ -54,11 +36,32 @@
 			$ticket_value=$row["ticket_value"];
 		}
 		?>
-        <label for="ticketvalue"><b>Ticket Value(Economy):</b></label>
+		<label for="seat_no_label"><b>Seat No:</b></label>
+		<input align="center" type="text" name="seat_no" value="<?php echo $id ?>"readonly>
+		<br><br>
+		<label for="passport"><b>Passport ID:</b></label>
+		<input align="center" type="text" name="passport"> 
+		<br><br>
+		<label for="firstname"><b>First Name:</b></label>
+		<input align="center" type="text" name="firstname"> 
+		<br><br>
+		<label for="lastname"><b>Last Name:</b></label>
+		<input align="center" type="text" name="lastname"> 
+		<br><br>
+		<label for="age"><b>Age:</b></label>
+		<input align="center" type="text" name="age"> 
+		<br><br>
+		<label for="ticketvalue"><b>Ticket Value(Economy):</b></label>
 		<input type="text" name="ticket_value" value="<?php echo $ticket_value?>" readonly>
 		<br><br>
-		<input type="submit" value="Book">
-	</form>
+
+	<?php 
+	}
+	
+	?>
+	<br>
+	<br>
+
 	<br><br><br>
 	<table >
 		<tr>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
 	<?php
+		session_start();
 		require 'databaseaccess.php';
 	?>
 	<title>
@@ -50,7 +51,7 @@
                     <td><?php  echo $row["plane_id"];  ?></td>
                     
 
-    				<td><a class="button" href="/AirlineDBMS/seatbooking.php?sid=<?php echo $row["scheduler_id"]?>">Schedule</a></td>
+    				<td><a class="button" href="/AirlineDMBS/AirlineDBMS/seatbooking.php?sid=<?php echo $row["scheduler_id"]?>">Schedule</a></td>
             	</tr><?php
 			}
 		?>
