@@ -25,6 +25,16 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `aeroplane_type`
 --
+CREATE TABLE `admin` (
+  `admin_id` int(6) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `first_name` varchar(20) NOT NULL,
+  `last_name` varchar(20) NOT NULL,
+  `address` varchar(50) NOT NULL,
+  `password` varchar(40) NOT NULL,
+  `email` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 CREATE TABLE `aeroplane_type` (
   `type_id` varchar(6) NOT NULL,
@@ -447,6 +457,29 @@ CREATE TABLE `passenger` (
   `booking_id` int(6) NOT NULL,
   `class_type` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DELIMITER $$
+CREATE TRIGGER `before_package_insert` BEFORE INSERT ON `package` FOR EACH ROW BEGIN
+  declare msg1 varchar(128);
+  
+  IF (new.discount_percentage <=0  or new.discount_percentage>100 )THEN
+    set msg1 = "Invalid discount_percentage";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF length(trim(new.package_type)) =0 THEN
+    set msg1 = "Invalid package_type";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF length(trim(new.description)) = 0 THEN
+    set msg1 = "Invalid description";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  
+END
+$$
+DELIMITER ;
+
 
 -- --------------------------------------------------------
 
