@@ -2,7 +2,7 @@
 	require 'databaseaccess.php';
 	session_start();
 	$sid = $_SESSION['scheduler_id'];
-	$cid = $_SESSION['customer_id'];
+	$cid = $_SESSION['id'];
 	$ticket_amount = $_POST['ticketamount'];
 	$database = new DbConnect();	
 	$databaseconnect = $database->connect();

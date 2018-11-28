@@ -18,7 +18,7 @@
   <?php
     require 'databaseaccess.php';
     session_start();
-    if (isset($_SESSION['user_name'])) {
+    if (isset($_SESSION['id'])) {
       header('location: flightscheduler.php');
     }
     elseif(isset($_POST['Fname'])){
@@ -119,11 +119,11 @@
         $result = $result1->fetch_assoc();
         $id=$result['id'];
         if($id[0]==u){
-          $_SESSION["customer_id"] = $id;
+          $_SESSION["id"] = $id;
           $_SESSION["type"] = 'customer';
           header('location: flightscheduler.php');
         }elseif($id[0]==a){
-          $_SESSION["customer_id"] = $id;
+          $_SESSION["id"] = $id;
           $_SESSION["type"] = 'admin';
           header('location: aeroplane_types.php');
         }else{
