@@ -144,7 +144,7 @@
           <form class="login-form" action="welcome.php" method="post">
             <input id ="userName" type="text" placeholder="User Name" name="userName"/>
             <input id ="password" type="password" placeholder="password" name="password" />
-            <button class="mainbutton" type= "submit">log</button>
+            <button class="mainbutton" type= "submit">log In</button>
           </form>
           
           <p class="message">Not registered? <button class="button" onclick="signup1()">Open Account</button></p>

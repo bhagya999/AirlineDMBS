@@ -3,6 +3,14 @@
 	<?php
 		session_start();
 		require 'databaseaccess.php';
+		if (!isset($_SESSION['id'])) {
+			// echo "name";
+	    	header('location: welcome.php');
+	    }
+	    elseif($_SESSION['type']!="customer"){
+	    	// echo $_SESSION['type'];
+	    	header('location: welcome.php');
+	    }
 	?>
 	<title>
 		Flight Scheduler
@@ -59,7 +67,7 @@
                     <td><?php  echo $row["plane_id"];  ?></td>
                     
 
-    				<td><a class="button" href="/AirlineDMBS/AirlineDBMS/seatbooking.php?sid=<?php echo $row["scheduler_id"]?>">Schedule</a></td>
+    				<td><a class="button" href="seatbooking.php?sid=<?php echo $row["scheduler_id"]?>">Schedule</a></td>
             	</tr><?php
 			}
 		?>

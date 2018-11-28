@@ -1,9 +1,26 @@
 <!DOCTYPE html>
 <html>
+<?php 
+		if (!isset($_SESSION['id'])) {
+	      header('location: welcome.php');
+	    }
+	    elseif($_SESSION['type']!="admin"){
+	    	header('location: welcome.php');
+	    } ?>
 <head>
 	<title>Update scheduler</title>
+	<link href="css.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+	<div class="navBar">
+		<ul>
+		  <li><a href="index.php">Home</a></li>
+		  <li><a href="">Aeroplane Types</a></li>
+		  <li><a href="flight.php">Flights</a></li>
+		  <li><a  class="active" href="scheduler_add.php">Update scheduler</a></li>
+		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
+		</ul>
+	</div>
 	<?php if ( !empty($_POST) ) {
 		$planeID = $_POST['planeID'];
 		$schedulerID = $_POST['schedulerID'];
