@@ -19,13 +19,48 @@
  }
   </style>
   </head>
-  <?php 
-  if(isset($_POST['Fname'])){
-    echo "Sign Up";
-  }elseif (isset($_POST['userName'])) {
-    echo "Log In";
-  }
+  <?php
+    require 'databaseaccess.php';
+    session_start();
+    if (isset($_SESSION['user_name'])) {
+      header('location: flightscheduler.php');
+    }
+    elseif(isset($_POST['Fname'])){
+      $first_name = $_POST['Fname'];
+      $last_name = $_POST['Lname'];
+      $address = $_POST['address'];
+      $email_address = $_POST['email'];
+      $user_name = $_POST['userName'];
+      $password = $_POST['password'];
+      $database = new DbConnect();  
+      $databaseconnect = $database->connect();
+      $sql1 = "SELECT * FROM customer";
+      $result1 = mysqli_query($databaseconnect,$sql1);
+      $count = mysqli_num_rows($result1)+1;
+      $sqlf = "INSERT INTO customer(customer_id,first_name,last_name,address,email,user_name,password,package_type) VALUES ($count,'$first_name','$last_name','$address','$email_address','$user_name','$password','Guest')";
+      $result = mysqli_query($databaseconnect,$sqlf);
+      if($result){
+        echo"<h4 align= 'center'>Susccusfully Registred</h4>";
+      }
+    }elseif (isset($_POST['userName'])) {
+      
+      $user_name = $_POST['userName'];
+      $password = $_POST['password'];
+      $database = new DbConnect();  
+      $databaseconnect = $database->connect();
+      $sql1 = "SELECT * FROM customer WHERE user_name='$user_name' AND password='$password'";
+      $result1 = mysqli_query($databaseconnect,$sql1);
+      $count = mysqli_num_rows($result1);
+      if($count){
+        
+        $result = $result1->fetch_assoc();
+        $_SESSION["user_name"] = $user_name;
+        $_SESSION["first_name"] = $result['first_name'];
+        header('location: flightscheduler.php');
+      }
+    }
     ?>
+
   <body>
     <div id ="login" class="signin">
       <div class="login-page">
@@ -51,8 +86,8 @@
             <input name ="email" type="email" placeholder="Email" name="email" />
             <textarea name="address" rows="4" placeholder="Address"></textarea>
             <input name ="userName" type="text" placeholder="User Name" name="userName" />
-            <input name ="password1" type="password" placeholder="password" name="password1" />
-            <input name ="password2" type="password" placeholder="Re enter password" name="password2" />
+            <input name ="password" type="password" placeholder="password" name="password" />
+            <!-- <input name ="password2" type="password" placeholder="Re enter password" name="password2" /> -->
             <button class="mainbutton" type= "submit">create</button>
           </form>
           
