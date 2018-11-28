@@ -33,7 +33,8 @@
       $sql1 = "SELECT * FROM customer";
       $result1 = mysqli_query($databaseconnect,$sql1);
       $count = mysqli_num_rows($result1)+1;
-      $sqlf = "INSERT INTO customer(customer_id,first_name,last_name,address,email,user_name,password,package_type) VALUES ($count,'$first_name','$last_name','$address','$email_address','$user_name','$password','Guest')";
+      $customer_id = "u-"."$count";
+      $sqlf = "INSERT INTO customer(customer_id,first_name,last_name,address,email,user_name,password,package_type) VALUES ('$customer_id','$first_name','$last_name','$address','$email_address','$user_name','$password','Guest')";
       $result = mysqli_query($databaseconnect,$sqlf);
       if($result){
         echo"<h4 align= 'center'>Susccusfully Registred</h4>";
@@ -63,6 +64,7 @@
         $_SESSION["customer_id"] = $result['customer_id'];
         $_SESSION["user_name"] = $user_name;
         $_SESSION["first_name"] = $result['first_name'];
+        $_SESSION["type"] = $result['customer'];
         header('location: flightscheduler.php');
       }else{
         echo("<h4 align='center'>Incorrect Email OR Password.</h4>");
