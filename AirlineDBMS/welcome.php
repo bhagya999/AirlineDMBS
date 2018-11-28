@@ -7,11 +7,11 @@
   <link href="css.css" rel="stylesheet" type="text/css">
   <style type="text/css">
   body {
-    background: #76b852; /* fallback for old browsers */
-    background: -webkit-linear-gradient(right, #76b852, #8DC26F);
+    background: #418491; /* fallback for old browsers */
+    /*background: -webkit-linear-gradient(right, #76b852, #8DC26F);
     background: -moz-linear-gradient(right, #76b852, #8DC26F);
     background: -o-linear-gradient(right, #76b852, #8DC26F);
-    background: linear-gradient(to left, #76b852, #8DC26F);
+    background: linear-gradient(to left, #76b852, #8DC26F);*/
     font-family: "Roboto", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;      
@@ -54,6 +54,7 @@
       if($count){
         
         $result = $result1->fetch_assoc();
+        $_SESSION["customer_id"] = $result['customer_id'];
         $_SESSION["user_name"] = $user_name;
         $_SESSION["first_name"] = $result['first_name'];
         header('location: flightscheduler.php');
@@ -73,7 +74,7 @@
             <button class="mainbutton" type= "submit">log</button>
           </form>
           
-          <p class="message">Not registered? <button onclick="signup1()">Open Account</button></p>
+          <p class="message">Not registered? <button class="button" onclick="signup1()">Open Account</button></p>
         </div>
       </div>
     </div>
@@ -83,7 +84,7 @@
           <form class="register-form" name="register" action="welcome.php" method="post">
             <input name ="Fname" type="text" placeholder="First Name" name="Fname" />
             <input name ="Lname" type="text" placeholder="Last Name" name="Lname" />
-            <input name ="email" type="email" placeholder="Email" name="email" />
+            <input name ="email" type="text" placeholder="Email" name="email" />
             <textarea name="address" rows="4" placeholder="Address"></textarea>
             <input name ="userName" type="text" placeholder="User Name" name="userName" />
             <input name ="password" type="password" placeholder="password" name="password" />
@@ -91,7 +92,7 @@
             <button class="mainbutton" type= "submit">create</button>
           </form>
           
-          <p class="message">Already registered? <button onclick="login()">Log In</button></p>
+          <p class="message">Already registered? <button class="button" onclick="login()">Log In</button></p>
         </div>
       </div>
     </div>
@@ -107,7 +108,4 @@
         document.getElementById('login').style.display= 'none' ;
       }
   </script>
-
-  <script src="app.js"></script>
-
   </html>

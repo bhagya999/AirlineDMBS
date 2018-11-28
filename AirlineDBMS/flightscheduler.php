@@ -18,9 +18,17 @@
     color: initial;
 }
 	</style>
+	<link href="css.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+	<div class="navBar">
+		<ul>
+		  <li><a href="index.php">Home</a></li>
+		  <li><a class="active" href="flightscheduler.php">Flight Scheduler</a></li>
+		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
+		</ul>
+	</div>
 	<h1>Flight Scheduler </h1>
 	<table>
         <thead>

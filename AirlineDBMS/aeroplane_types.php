@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <head>
+
 	<?php
 		require 'databaseaccess.php';
 	?>
 	<title>
 		Aeroplane Types
 	</title>
+	<link href="css.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-	<h1>Aero Plane Types</h1>
+	<div class="navBar">
+		<ul>
+		  <li><a href="index.php">Home</a></li>
+		  <li><a class="active" href="">Aeroplane Types</a></li>
+		  <!-- <li><a href="booking.php">Booking</a></li> -->
+		  <!-- <li><a href="flightscheduler.php">Flight Scheduler</a></li> -->
+		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
+		</ul>
+	</div>
+	<h1>Aero Plane Types </h1> 
+	
+	
 	<table>
         <thead>
             <tr>
