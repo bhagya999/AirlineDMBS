@@ -50,15 +50,15 @@ DELIMITER $$
 CREATE TRIGGER `before_aeroplane_type_insert` BEFORE INSERT ON `aeroplane_type` FOR EACH ROW BEGIN
 	declare msg varchar(128);
   IF new.no_of_seats<=0  THEN
-  set msg = "Invalid Input";
+  set msg = "Invalid no_of_seats";
     signal sqlstate '45000' set message_text = msg;
 	end if;
   IF new.max_flight_duration<0  THEN
-  set msg = "Invalid Input";
+  set msg = "Invalid max_flight_duration";
     signal sqlstate '45000' set message_text = msg;
 	end if;
   IF new.number_of_engine<=0  THEN
-  set msg = "Invalid Input";
+  set msg = "Invalid number_of_engine";
     signal sqlstate '45000' set message_text = msg;
 	end if;
 END
@@ -232,20 +232,29 @@ CREATE TRIGGER `before_customer_insert` BEFORE INSERT ON `customer` FOR EACH ROW
   set msg = "Invalid Email";
     signal sqlstate '45000' set message_text = msg;
 	end if;
-  IF new.first_name REGEXP '[^a-zA-Z]+$' THEN
+  IF new.first_name REGEXP '[^a-zA-Z]+$' or length(trim(new.first_name)) = 0 THEN
   set msg = "Invalid first_name";
     signal sqlstate '45000' set message_text = msg;
 	end if;
-  IF new.last_name  REGEXP '[^a-zA-Z]+$' THEN
+  IF new.last_name  REGEXP '[^a-zA-Z]+$' or length(trim(new.last_name)) = 0  THEN
   set msg = "Invalid last_name";
     signal sqlstate '45000' set message_text = msg;
   end if;
-  IF new.user_name  REGEXP '[^a-zA-Z]+$' THEN
+  IF new.user_name  REGEXP '[^a-zA-Z]+$' or length(trim(new.user_name)) = 0 THEN
   set msg = "Invalid user_name";
     signal sqlstate '45000' set message_text = msg;
   end if;
-  set passwordtemp = md5(sha1(new.password));
-  set new.password = passwordtemp;
+  IF length(trim(new.password)) = 0 THEN
+  set msg = "Invalid password";
+    signal sqlstate '45000' set message_text = msg;
+  ELSE 
+    set passwordtemp = md5(sha1(new.password));
+    set new.password = passwordtemp;
+  end if;
+  IF length(trim(new.address)) = 0 THEN
+  set msg = "Invalid Address";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
 END
 $$
 DELIMITER ;
@@ -289,6 +298,26 @@ INSERT INTO `flight` (`flight_id`, `flight_day`, `flight_time`, `route_id`, `tic
 (18, 'SAT', '20:00:00', 10, 80000),
 (19, 'SAT', '21:00:00', 6, 70000),
 (20, 'SAT', '22:00:00', 4, 65000);
+
+
+DELIMITER $$
+CREATE TRIGGER `before_flight_insert` BEFORE INSERT ON `flight` FOR EACH ROW BEGIN
+  declare msg varchar(128);
+  IF not(new.flight_day="SUN" or new.flight_day="MON" or new.flight_day="TUE" or new.flight_day="WED" or new.flight_day="THU" or new.flight_day="FRI" or new.flight_day="SAT") THEN
+  set msg = "Invalid flight_day";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
+  IF new.route_id<=0  THEN
+  set msg = "Invalid route_id";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
+  IF new.ticket_value<=0  THEN
+  set msg = "Invalid ticket_value";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -341,11 +370,19 @@ CREATE TRIGGER `before_flight_scheduler_insert` BEFORE INSERT ON `flight_schedul
   declare dt date;
   set dt = current_date();
   IF new.flight_id <=0 THEN
-    set msg1 = "Invalid Input";
+    set msg1 = "Invalid flight_id";
     signal sqlstate '45000' set message_text = msg1;
 	end if;
+  IF new.scheduler_id <=0 THEN
+    set msg1 = "Invalid scheduler_id";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF length(trim(new.plane_id)) = 0 THEN
+    set msg1 = "Invalid plane_id";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
   IF new.flight_date <=dt THEN
-    set msg1 = "Invalid Input";
+    set msg1 = "Invalid flight_date";
     signal sqlstate '45000' set message_text = msg1;
 	end if;
 END
@@ -373,6 +410,27 @@ INSERT INTO `package` (`package_type`, `discount percentage`, `description`) VAL
 ('Gold', 9, 'This is about gold class customers'),
 ('Guest', 0, 'this is about guest class customers');
 
+
+DELIMITER $$
+CREATE TRIGGER `before_package_insert` BEFORE INSERT ON `package` FOR EACH ROW BEGIN
+  declare msg1 varchar(128);
+  
+  IF new.discount_percentage <=0  or new.discount_percentage>100 THEN
+    set msg1 = "Invalid discount_percentage";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF length(trim(new.package_type)) =0 THEN
+    set msg1 = "Invalid package_type";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF length(trim(new.description)) = 0 THEN
+    set msg1 = "Invalid description";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  
+END
+$$
+DELIMITER ;
 -- --------------------------------------------------------
 
 --
