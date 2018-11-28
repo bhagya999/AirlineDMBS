@@ -26,8 +26,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `aeroplane_type`
 --
 CREATE TABLE `admin` (
-  `admin_id` int(6) NOT NULL,
-  `username` varchar(20) NOT NULL,
+  `id` varchar(8) PRIMARY KEY,
+  `user_name` varchar(20) NOT NULL,
   `first_name` varchar(20) NOT NULL,
   `last_name` varchar(20) NOT NULL,
   `address` varchar(50) NOT NULL,
@@ -35,6 +35,44 @@ CREATE TABLE `admin` (
   `email` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+DELIMITER $$
+CREATE TRIGGER `before_admin_insert` BEFORE INSERT ON `admin` FOR EACH ROW BEGIN
+  declare msg varchar(128);
+  declare passwordtemp varchar(40);
+  IF length(trim(new.id)) = 0 THEN
+  set msg = "Invalid id";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
+  IF NEW.`email` NOT LIKE '%_@%_.__%'  THEN
+  set msg = "Invalid Email";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
+  IF new.first_name REGEXP '[^a-zA-Z]+$' or length(trim(new.first_name)) = 0 THEN
+  set msg = "Invalid first_name";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
+  IF new.last_name  REGEXP '[^a-zA-Z]+$' or length(trim(new.last_name)) = 0  THEN
+  set msg = "Invalid last_name";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
+  IF new.user_name  REGEXP '[^a-zA-Z]+$' or length(trim(new.user_name)) = 0 THEN
+  set msg = "Invalid user_name";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
+  IF length(trim(new.password)) = 0 THEN
+  set msg = "Invalid password";
+    signal sqlstate '45000' set message_text = msg;
+  ELSE 
+    set passwordtemp = md5(sha1(new.password));
+    set new.password = passwordtemp;
+  end if;
+  IF length(trim(new.address)) = 0 THEN
+  set msg = "Invalid Address";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
+END
+$$
+DELIMITER ;
 
 CREATE TABLE `aeroplane_type` (
   `type_id` varchar(6) NOT NULL,
@@ -115,7 +153,7 @@ INSERT INTO `airport` (`airport_code`, `name`, `country`, `state`, `city`, `long
 
 CREATE TABLE `booking` (
   `booking_id` int(6) NOT NULL,
-  `customer_id` int(6) NOT NULL,
+  `id` varchar(8) NOT NULL,
   `scheduler_id` int(6) NOT NULL,
   `payment` double NOT NULL,
   `booked_time` datetime NOT NULL,
@@ -126,7 +164,7 @@ CREATE TABLE `booking` (
 -- Dumping data for table `booking`
 --
 
-INSERT INTO `booking` (`booking_id`, `customer_id`, `scheduler_id`, `payment`, `booked_time`, `no_of_seats`) VALUES
+INSERT INTO `booking` (`booking_id`, `id`, `scheduler_id`, `payment`, `booked_time`, `no_of_seats`) VALUES
 (1, 4, 8, 50000, '2018-11-06 23:00:00', 2),
 (2, 1, 10, 45000, '2018-11-06 23:00:00', 1),
 (3, 6, 12, 55000, '2018-11-06 23:00:00', 1),
@@ -199,7 +237,7 @@ DELIMITER ;
 --
 
 CREATE TABLE `customer` (
-  `customer_id` int(6) NOT NULL,
+  `id` varchar(8) NOT NULL,
   `first_name` varchar(20) NOT NULL,
   `last_name` varchar(20) NOT NULL,
   `address` varchar(50) NOT NULL,
@@ -213,7 +251,7 @@ CREATE TABLE `customer` (
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`customer_id`, `first_name`, `last_name`, `address`, `email`, `user_name`, `password`, `package_type`) VALUES
+INSERT INTO `customer` (`id`, `first_name`, `last_name`, `address`, `email`, `user_name`, `password`, `package_type`) VALUES
 (1, 'CustomerFirst1', 'CustomerLast1', 'CustomerAddress1', 'customer1@example.com', 'customerUser1', 'password', 'Frequent'),
 (2, 'CustomerFirst2', 'CustomerLast2', 'CustomerAddress2', 'customer2@example.com', 'customerUser2', 'password', 'Gold'),
 (3, 'CustomerFirst3', 'CustomerLast3', 'CustomerAddress3', 'customer3@example.com', 'customerUser3', 'password', 'Gold'),
@@ -238,6 +276,10 @@ DELIMITER $$
 CREATE TRIGGER `before_customer_insert` BEFORE INSERT ON `customer` FOR EACH ROW BEGIN
 	declare msg varchar(128);
   declare passwordtemp varchar(40);
+  IF length(trim(new.id)) = 0 THEN
+  set msg = "Invalid id";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
   IF NEW.`email` NOT LIKE '%_@%_.__%'  THEN
   set msg = "Invalid Email";
     signal sqlstate '45000' set message_text = msg;
@@ -944,7 +986,7 @@ ALTER TABLE `airport`
 --
 ALTER TABLE `booking`
   ADD PRIMARY KEY (`booking_id`),
-  ADD KEY `FK_customer` (`customer_id`),
+  ADD KEY `FK_customer` (`id`),
   ADD KEY `FK_scheduler` (`scheduler_id`);
 
 --
@@ -957,7 +999,7 @@ ALTER TABLE `class`
 -- Indexes for table `customer`
 --
 ALTER TABLE `customer`
-  ADD PRIMARY KEY (`customer_id`),
+  ADD PRIMARY KEY (`id`),
   ADD KEY `FK_package` (`package_type`);
 
 --
@@ -1038,7 +1080,7 @@ ALTER TABLE `flight`
 -- Constraints for table `booking`
 --
 ALTER TABLE `booking`
-  ADD CONSTRAINT `FK_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_customer` FOREIGN KEY (`id`) REFERENCES `customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_scheduler` FOREIGN KEY (`scheduler_id`) REFERENCES `flight_scheduler` (`scheduler_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
