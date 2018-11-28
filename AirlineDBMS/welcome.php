@@ -64,10 +64,11 @@
         $_SESSION["user_name"] = $user_name;
         $_SESSION["first_name"] = $result['first_name'];
         header('location: flightscheduler.php');
+      }else{
+        echo("<h4 align='center'>Incorrect Email OR Password.</h4>");
       }
     }
     ?>
-
 
   <body>
     <div id ="login" class="signin">
