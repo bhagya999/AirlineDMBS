@@ -2,6 +2,7 @@
 <head>
 
 	<?php
+	session_start();
 		require 'databaseaccess.php';
 		if (!isset($_SESSION['id'])) {
 	      header('location: welcome.php');

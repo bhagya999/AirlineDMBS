@@ -15,13 +15,14 @@
 	    }
 
 		if ( !empty($_POST) ) {
-			$customer_id = $_POST['customer_id'];
-			$classtype = $_POST['classtype'];
-			$ticket_value = $_POST['ticket_value'];
-			$scheduler_id = $_POST['scheduler_id'];
-			$seat_no = $_POST['seat_no'];
 			$database = new DbConnect();	
 			$databaseconnect = $database->connect();
+			$customer_id = mysqli_real_escape_string($databaseconnect, $_POST['customer_id']);
+			$classtype = mysqli_real_escape_string($databaseconnect, $_POST['classtype']);
+			$ticket_value = mysqli_real_escape_string($databaseconnect, $_POST['ticket_value']);
+			$scheduler_id = mysqli_real_escape_string($databaseconnect, $_POST['scheduler_id']);
+			$seat_no = mysqli_real_escape_string($databaseconnect, $_POST['seat_no']);
+			
 			$sql1 = "SELECT * FROM class WHERE class_type = '$classtype'";
 			$result = mysqli_query($databaseconnect,$sql1);
 			while($row = mysqli_fetch_array($result)){
