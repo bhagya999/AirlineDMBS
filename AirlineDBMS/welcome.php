@@ -54,6 +54,7 @@
       if($count){
         
         $result = $result1->fetch_assoc();
+        $_SESSION["customer_id"] = $result['customer_id'];
         $_SESSION["user_name"] = $user_name;
         $_SESSION["first_name"] = $result['first_name'];
         header('location: flightscheduler.php');
@@ -83,7 +84,7 @@
           <form class="register-form" name="register" action="welcome.php" method="post">
             <input name ="Fname" type="text" placeholder="First Name" name="Fname" />
             <input name ="Lname" type="text" placeholder="Last Name" name="Lname" />
-            <input name ="email" type="email" placeholder="Email" name="email" />
+            <input name ="email" type="text" placeholder="Email" name="email" />
             <textarea name="address" rows="4" placeholder="Address"></textarea>
             <input name ="userName" type="text" placeholder="User Name" name="userName" />
             <input name ="password" type="password" placeholder="password" name="password" />
@@ -107,7 +108,4 @@
         document.getElementById('login').style.display= 'none' ;
       }
   </script>
-
-  <script src="app.js"></script>
-
   </html>
