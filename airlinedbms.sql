@@ -449,7 +449,7 @@ DELIMITER ;
 
 CREATE TABLE `passenger` (
   `ticket_no` int(6) NOT NULL,
-  `passport_id` varchar(10) NOT NULL,
+  `passport_id` int(10) NOT NULL,
   `first_name` varchar(20) NOT NULL,
   `last_name` varchar(20) NOT NULL,
   `address` varchar(50) NOT NULL,
@@ -460,21 +460,42 @@ CREATE TABLE `passenger` (
 
 
 DELIMITER $$
-CREATE TRIGGER `before_package_insert` BEFORE INSERT ON `package` FOR EACH ROW BEGIN
+CREATE TRIGGER `before_passenger_insert` BEFORE INSERT ON `passenger` FOR EACH ROW BEGIN
   declare msg1 varchar(128);
   
-  IF (new.discount_percentage <=0  or new.discount_percentage>100 )THEN
-    set msg1 = "Invalid discount_percentage";
+  IF (new.ticket_no<=0)THEN
+    set msg1 = "Invalid ticket_no";
     signal sqlstate '45000' set message_text = msg1;
   end if;
-  IF length(trim(new.package_type)) =0 THEN
-    set msg1 = "Invalid package_type";
+  IF (new.passport_id<=0)THEN
+    set msg1 = "Invalid passport_id";
     signal sqlstate '45000' set message_text = msg1;
   end if;
-  IF length(trim(new.description)) = 0 THEN
-    set msg1 = "Invalid description";
+  IF new.first_name REGEXP '[^a-zA-Z]+$' or length(trim(new.first_name)) = 0 THEN
+  set msg1 = "Invalid first_name";
     signal sqlstate '45000' set message_text = msg1;
   end if;
+  IF new.last_name  REGEXP '[^a-zA-Z]+$' or length(trim(new.last_name)) = 0  THEN
+  set msg1 = "Invalid last_name";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF length(trim(new.address)) = 0 THEN
+  set msg1 = "Invalid Address";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF (new.seat_no<=0) THEN
+    set msg1 = "Invalid seat_no";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF (new.booking_id<=0) THEN
+    set msg1 = "Invalid booking_id";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF (new.class_type<=0) THEN
+    set msg1 = "Invalid class_type";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+
   
 END
 $$
@@ -509,6 +530,36 @@ INSERT INTO `plane` (`plane_id`, `plane_name`, `type_id`, `bought_year`, `last_m
 ('7', 'BOING 757 2015', 'BO757', 2015, '2018-01-01'),
 ('8', 'AIR BUS 380', 'AB380', 2018, '2018-01-01');
 
+DELIMITER $$
+CREATE TRIGGER `before_plane_insert` BEFORE INSERT ON `plane` FOR EACH ROW BEGIN
+  declare msg1 varchar(128);
+  declare dt date;
+  set dt = current_date();
+  IF (length(trim(new.plane_id)) =0)THEN
+    set msg1 = "Invalid plane_id";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF length(trim(new.plane_name)) =0 THEN
+    set msg1 = "Invalid plane_name";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF length(trim(new.type_id)) = 0 THEN
+    set msg1 = "Invalid type_id";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF dt<new.bought_year THEN
+    set msg1 = "Invalid bought_year";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF dt<new.last_maintained_date THEN
+    set msg1 = "Invalid last_maintained_date";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  
+END
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -522,6 +573,31 @@ CREATE TABLE `revenue` (
   `final_amount` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+DELIMITER $$
+CREATE TRIGGER `before_revenue_insert` BEFORE INSERT ON `revenue` FOR EACH ROW BEGIN
+  declare msg1 varchar(128);
+  
+  IF new.booking_id<=0 THEN
+    set msg1 = "Invalid booking_id";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF new.sub_total<=0 THEN
+    set msg1 = "Invalid sub_total";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF new.discounting_amount<=0 THEN
+    set msg1 = "Invalid discounting_amount";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF new.final_amount<=0 THEN
+    set msg1 = "Invalid final_amount";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  
+END
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -532,14 +608,15 @@ CREATE TABLE `route` (
   `route_id` int(6) NOT NULL,
   `flight_from` varchar(3) NOT NULL,
   `flight_to` varchar(3) NOT NULL,
-  `distance(km)` int(4) NOT NULL
+  `distance` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 --
 -- Dumping data for table `route`
 --
 
-INSERT INTO `route` (`route_id`, `flight_from`, `flight_to`, `distance(km)`) VALUES
+INSERT INTO `route` (`route_id`, `flight_from`, `flight_to`, `distance`) VALUES
 (1, 'BIA', 'CGK', 300),
 (2, 'CGK', 'BIA', 300),
 (3, 'DPS', 'BOM', 430),
@@ -560,6 +637,31 @@ INSERT INTO `route` (`route_id`, `flight_from`, `flight_to`, `distance(km)`) VAL
 (18, 'SIN', 'BIA', 400),
 (19, 'BOM', 'DMK', 350),
 (20, 'DMK', 'BOM', 350);
+
+DELIMITER $$
+CREATE TRIGGER `before_route_insert` BEFORE INSERT ON `route` FOR EACH ROW BEGIN
+  declare msg1 varchar(128);
+  
+  IF new.route_id<=0 THEN
+    set msg1 = "Invalid route_id";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF length(trim(new.flight_from)) = 0 THEN
+    set msg1 = "Invalid flight_from";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF length(trim(new.flight_to)) = 0 THEN
+    set msg1 = "Invalid flight_to";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF new.distance<=0 THEN
+    set msg1 = "Invalid distance";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -804,7 +906,27 @@ INSERT INTO `seat` (`scheduler_id`, `seat_no`, `ticket_no`, `state`) VALUES
 --
 -- Indexes for dumped tables
 --
-
+DELIMITER $$
+CREATE TRIGGER `before_seat_insert` BEFORE INSERT ON `seat` FOR EACH ROW BEGIN
+  declare msg1 varchar(128);
+  
+  IF new.scheduler_id<=0 THEN
+    set msg1 = "Invalid scheduler_id";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF new.seat_no<=0 THEN
+    set msg1 = "Invalid seat_no";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  IF new.ticket_no<=0 THEN
+    set msg1 = "Invalid ticket_no";
+    signal sqlstate '45000' set message_text = msg1;
+  end if;
+  
+  
+END
+$$
+DELIMITER ;
 --
 -- Indexes for table `aeroplane_type`
 --
