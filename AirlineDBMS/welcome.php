@@ -8,10 +8,6 @@
   <style type="text/css">
   body {
     background: #418491; /* fallback for old browsers */
-    /*background: -webkit-linear-gradient(right, #76b852, #8DC26F);
-    background: -moz-linear-gradient(right, #76b852, #8DC26F);
-    background: -o-linear-gradient(right, #76b852, #8DC26F);
-    background: linear-gradient(to left, #76b852, #8DC26F);*/
     font-family: "Roboto", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;      
@@ -41,6 +37,16 @@
       $result = mysqli_query($databaseconnect,$sqlf);
       if($result){
         echo"<h4 align= 'center'>Susccusfully Registred</h4>";
+      }else{
+        echo("<h4 align='center'>".'Error description: ' . mysqli_error($databaseconnect)."</h4>");
+        echo("<style type='text/css'>
+.signin{
+    display: none;
+ }
+ .signup{
+    display: block;
+ }
+ </style>");
       }
     }elseif (isset($_POST['userName'])) {
       
@@ -61,6 +67,7 @@
       }
     }
     ?>
+
 
   <body>
     <div id ="login" class="signin">
@@ -108,4 +115,5 @@
         document.getElementById('login').style.display= 'none' ;
       }
   </script>
+
   </html>
