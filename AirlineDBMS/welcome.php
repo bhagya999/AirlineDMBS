@@ -34,9 +34,12 @@
       $result1 = mysqli_query($databaseconnect,$sql1);
       $count = mysqli_num_rows($result1)+1;
       $customer_id = "u-"."$count";
-      $sqlf = "INSERT INTO customer(customer_id,first_name,last_name,address,email,user_name,password,package_type) VALUES ('$customer_id','$first_name','$last_name','$address','$email_address','$user_name','$password','Guest')";
+      $sqlf = "INSERT INTO customer(id,first_name,last_name,address,email,package_type) VALUES ('$customer_id','$first_name','$last_name','$address','$email_address','Guest')";
+      $sqlf1 = "INSERT INTO user(id,password,user_name) VALUES ('$customer_id','$password','$user_name')";
+
       $result = mysqli_query($databaseconnect,$sqlf);
-      if($result){
+      $result1 = mysqli_query($databaseconnect,$sqlf1);
+      if($result1){
         echo"<h4 align= 'center'>Susccusfully Registred</h4>";
       }else{
         echo("<h4 align='center'>".'Error description: ' . mysqli_error($databaseconnect)."</h4>");
@@ -49,23 +52,83 @@
  }
  </style>");
       }
+
+       // try {
+      //     mysql_query("BEGIN");
+
+      //     $a1=mysql_query("INSERT INTO customer(id,first_name,last_name,address,email,package_type) VALUES ('$customer_id','$first_name','$last_name','$address','$email_address','Guest')");
+      //     $a2=mysql_query("INSERT INTO user(id,password,user_name) VALUES ('$customer_id','$password','$user_name')");
+
+      //     // If we arrive here, it means that no exception was thrown
+      //     // i.e. no query has failed, and we can commit the transaction
+      //     mysql_query("COMMIT");
+      //     echo"<h4 align= 'center'>Susccusfully Registred</h4>";
+      // } catch (Exception $e) {
+      //     // An exception has been thrown
+      //     // We must rollback the transaction
+      //     mysql_query("ROLLBACK");
+      //     echo("<h4 align='center'>".'Error description: ' . mysqli_error($databaseconnect)."</h4>");
+      //     echo("<style type='text/css'>
+      //         .signin{
+      //             display: none;
+      //          }
+      //          .signup{
+      //             display: block;
+      //          }
+      //          </style>");
+      //               }
+
+      // $sqlf0 = "BEGIN TRANSACTION [Tran1]
+      //           BEGIN TRY 
+      //               INSERT INTO customer(id,first_name,last_name,address,email,package_type) VALUES ('$customer_id','$first_name','$last_name','$address','$email_address','Guest')
+
+      //               INSERT INTO user(id,password,user_name) VALUES ('$customer_id','$password','$user_name')
+
+      //               COMMIT TRANSACTION [Tran1]
+
+      //           END TRY
+
+      //           BEGIN CATCH
+
+      //               ROLLBACK TRANSACTION [Tran1]
+
+      //           END CATCH ";
+      // $sqlf = "INSERT INTO customer(id,first_name,last_name,address,email,package_type) VALUES ('$customer_id','$first_name','$last_name','$address','$email_address','Guest')";
+      // $sqlf1 = "INSERT INTO user(id,password,user_name) VALUES ('$customer_id','$password','$user_name')";
+
+     
+      // $result = mysqli_query($databaseconnect,$sqlf);
+      // $result1 = mysqli_query($databaseconnect,$sqlf0);
+
+      // if($result1){
+        
+      // }else{
+        
+      // }
     }elseif (isset($_POST['userName'])) {
       
       $user_name = $_POST['userName'];
       $password = $_POST['password'];
       $database = new DbConnect();  
       $databaseconnect = $database->connect();
-      $sql1 = "SELECT * FROM customer WHERE user_name='$user_name' AND password='$password'";
+
+      $sql1 = "SELECT * FROM user WHERE user_name='$user_name' AND password='$password'";
       $result1 = mysqli_query($databaseconnect,$sql1);
       $count = mysqli_num_rows($result1);
       if($count){
-        
         $result = $result1->fetch_assoc();
-        $_SESSION["customer_id"] = $result['customer_id'];
-        $_SESSION["user_name"] = $user_name;
-        $_SESSION["first_name"] = $result['first_name'];
-        $_SESSION["type"] = $result['customer'];
-        header('location: flightscheduler.php');
+        $id=$result['id'];
+        if($id[0]==u){
+          $_SESSION["customer_id"] = $id;
+          $_SESSION["type"] = 'customer';
+          header('location: flightscheduler.php');
+        }elseif($id[0]==a){
+          $_SESSION["customer_id"] = $id;
+          $_SESSION["type"] = 'admin';
+          header('location: aeroplane_types.php');
+        }else{
+          echo("<h4 align='center'>Undefined User.</h4>");
+        }
       }else{
         echo("<h4 align='center'>Incorrect Email OR Password.</h4>");
       }
