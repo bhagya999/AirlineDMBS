@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html>
+<?php 
+session_start();
+		if (!isset($_SESSION['id'])) {
+	      header('location: welcome.php');
+	    }
+	    elseif($_SESSION['type']!="admin"){
+	    	header('location: welcome.php');
+	    } ?>
 <head>
 	<title>Update scheduler</title>
+	<link href="css.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+	<div class="navBar">
+		<ul>
+		  <li><a href="index.php">Home</a></li>
+		  <li><a href="aeroplane_types.php">Aeroplane Types</a></li>
+		  <li><a href="flight.php">Flights</a></li>
+		  <li><a  class="active" href="scheduler_add.php">Update scheduler</a></li>
+		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
+		</ul>
+	</div>
 	<?php if ( !empty($_POST) ) {
-		$planeID = $_POST['planeID'];
-		$schedulerID = $_POST['schedulerID'];
-		$flightID = $_POST['flightID'];
-		$flightDate = $_POST['flightDate'];
+		
 
 		$servername = "localhost";
 		$username = "root";
@@ -17,6 +32,10 @@
 
 		// Create connection
 		$conn = new mysqli($servername, $username, $password, $dbname);
+		$planeID = mysqli_real_escape_string($conn, $_POST['planeID']);
+		$schedulerID = mysqli_real_escape_string($conn, $_POST['schedulerID']);
+		$flightID = mysqli_real_escape_string($conn, $_POST['flightID']);
+		$flightDate = mysqli_real_escape_string($conn, $_POST['flightDate']);
 		// Check connection
 		if ($conn->connect_error) {
 		    die("Connection failed: " . $conn->connect_error);

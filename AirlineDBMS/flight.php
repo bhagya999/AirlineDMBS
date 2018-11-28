@@ -1,15 +1,34 @@
 <!DOCTYPE html>
 <head>
 	<?php
+	session_start();
 		require 'databaseaccess.php';
+		if (!isset($_SESSION['id'])) {
+	      header('location: welcome.php');
+			// echo $_SESSION['type'];
+	    }
+	    elseif($_SESSION['type']!="admin"){
+	    	header('location: welcome.php');
+	    	// echo "111";
+	    }
 	?>
 	<title>
 		Flights
 	</title>
+	<link href="css.css" rel="stylesheet" type="text/css">
 
 </head>
 
 <body>
+	<div class="navBar">
+		<ul>
+		  <li><a href="index.php">Home</a></li>
+		  <li><a href="aeroplane_types.php">Aeroplane Types</a></li>
+		  <li><a class="active" href="flight.php">Flights</a></li>
+		  <li><a href="scheduler_add.php">Update scheduler</a></li>
+		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
+		</ul>
+	</div>
 	<h1>Flights </h1>
 	<table>
         <thead>

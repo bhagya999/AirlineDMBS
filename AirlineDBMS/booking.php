@@ -3,6 +3,16 @@
 	<?php
 	session_start();
 		require 'databaseaccess.php';
+		if (!isset($_SESSION['id'])) {
+			// echo "name";
+	    	header('location: welcome.php');
+	    }
+	    elseif($_SESSION['type']!="customer"){
+	    	// echo $_SESSION['type'];
+	    	header('location: welcome.php');
+	    }elseif (!isset($_SESSION['scheduler_id'])) {
+	    	header('location: flightscheduler.php');
+	    }
 	?>
 	<title>
 		Booking
@@ -17,10 +27,19 @@
     color: initial;
 }
 	</style>
-
+	<link href="css.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+	<div class="navBar">
+		<ul>
+		  <li><a href="index.php">Home</a></li>
+		  <li><a href="flightscheduler.php">Flight Scheduler</a></li>
+		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
+		</ul>
+	</div>
+
+
 	<h1>Book </h1>
 	<?php $sid = $_SESSION['scheduler_id'];
 	$seatno = $_GET['seatno'];

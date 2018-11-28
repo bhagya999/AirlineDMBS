@@ -18,18 +18,26 @@
   <?php
     require 'databaseaccess.php';
     session_start();
-    if (isset($_SESSION['user_name'])) {
-      header('location: flightscheduler.php');
+    if (isset($_SESSION['id'])) {
+      // echo "string";
+      if($_SESSION['type']=="admin"){
+          header('location: flight.php');
+      }
+      elseif($_SESSION['type']=="customer"){
+          header('location: flightscheduler.php');
+      }
+      
     }
     elseif(isset($_POST['Fname'])){
-      $first_name = $_POST['Fname'];
-      $last_name = $_POST['Lname'];
-      $address = $_POST['address'];
-      $email_address = $_POST['email'];
-      $user_name = $_POST['userName'];
-      $password = $_POST['password'];
       $database = new DbConnect();  
       $databaseconnect = $database->connect();
+      $first_name = mysqli_real_escape_string($databaseconnect, $_POST['Fname']);
+      $last_name = mysqli_real_escape_string($databaseconnect, $_POST['Lname']);
+      $address = mysqli_real_escape_string($databaseconnect, $_POST['address']);
+      $email_address = mysqli_real_escape_string($databaseconnect, $_POST['email']);
+      $user_name = mysqli_real_escape_string($databaseconnect, $_POST['userName']);
+      $password = mysqli_real_escape_string($databaseconnect, $_POST['password']);
+      
       $sql1 = "SELECT * FROM customer";
       $result1 = mysqli_query($databaseconnect,$sql1);
       $count = mysqli_num_rows($result1)+1;
@@ -106,11 +114,14 @@
         
       // }
     }elseif (isset($_POST['userName'])) {
-      
-      $user_name = $_POST['userName'];
-      $password = $_POST['password'];
+
       $database = new DbConnect();  
       $databaseconnect = $database->connect();
+      
+      $user_name = mysqli_real_escape_string($databaseconnect,$_POST['userName']);
+      $password = mysqli_real_escape_string($databaseconnect,$_POST['password']);
+      
+      
 
       $sql1 = "SELECT * FROM user WHERE user_name='$user_name' AND password='$password'";
       $result1 = mysqli_query($databaseconnect,$sql1);
@@ -119,13 +130,13 @@
         $result = $result1->fetch_assoc();
         $id=$result['id'];
         if($id[0]==u){
-          $_SESSION["customer_id"] = $id;
+          $_SESSION["id"] = $id;
           $_SESSION["type"] = 'customer';
           header('location: flightscheduler.php');
         }elseif($id[0]==a){
-          $_SESSION["customer_id"] = $id;
+          $_SESSION["id"] = $id;
           $_SESSION["type"] = 'admin';
-          header('location: aeroplane_types.php');
+          header('location: flight.php');
         }else{
           echo("<h4 align='center'>Undefined User.</h4>");
         }
@@ -144,7 +155,7 @@
           <form class="login-form" action="welcome.php" method="post">
             <input id ="userName" type="text" placeholder="User Name" name="userName"/>
             <input id ="password" type="password" placeholder="password" name="password" />
-            <button class="mainbutton" type= "submit">log</button>
+            <button class="mainbutton" type= "submit">log In</button>
           </form>
           
           <p class="message">Not registered? <button class="button" onclick="signup1()">Open Account</button></p>

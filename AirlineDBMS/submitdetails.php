@@ -2,7 +2,7 @@
 	require 'databaseaccess.php';
 	session_start();
 	$sid = $_SESSION['scheduler_id'];
-	$cid = $_SESSION['customer_id'];
+	$cid = $_SESSION['id'];
 	$ticket_amount = $_POST['ticketamount'];
 	$database = new DbConnect();	
 	$databaseconnect = $database->connect();
@@ -19,10 +19,10 @@
 	$i=0;
 	foreach ($seats as $key=>$id) {
 		$i++; 
-     	$firstname = $_POST['firstname'.$i];
-      	$lastname = $_POST['lastname'.$i];
-     	$passport = $_POST['passport'.$i];
-  		$age = $_POST['age'.$i];
+     	$firstname = mysqli_real_escape_string($databaseconnect, $_POST['firstname'.$i]);
+      	$lastname = mysqli_real_escape_string($databaseconnect, $_POST['lastname'.$i]);
+     	$passport = mysqli_real_escape_string($databaseconnect, $_POST['passport'.$i]);
+  		$age = mysqli_real_escape_string($_POST['age'.$i]);
    		$sql = "SELECT booking_id FROM booking ORDER BY booking_id DESC LIMIT 1;";
 		$result = mysqli_query($databaseconnect,$sql);
 		while($row = mysqli_fetch_array($result)){

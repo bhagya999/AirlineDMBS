@@ -2,7 +2,14 @@
 <head>
 
 	<?php
+	session_start();
 		require 'databaseaccess.php';
+		if (!isset($_SESSION['id'])) {
+	      header('location: welcome.php');
+	    }
+	    elseif($_SESSION['type']!="admin"){
+	    	header('location: welcome.php');
+	    }
 	?>
 	<title>
 		Aeroplane Types
@@ -14,8 +21,8 @@
 		<ul>
 		  <li><a href="index.php">Home</a></li>
 		  <li><a class="active" href="">Aeroplane Types</a></li>
-		  <!-- <li><a href="booking.php">Booking</a></li> -->
-		  <!-- <li><a href="flightscheduler.php">Flight Scheduler</a></li> -->
+		  <li><a href="flight.php">Flights</a></li>
+		  <li><a href="scheduler_add.php">Update scheduler</a></li>
 		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
 		</ul>
 	</div>

@@ -3,14 +3,26 @@
 	<?php
 	session_start();
 		require 'databaseaccess.php';
+		if (!isset($_GET['sid'])) {
+	    	header('location: flightscheduler.php');
+	    }
+	    elseif (!isset($_SESSION['id'])) {
+			// echo "name";
+	    	header('location: welcome.php');
+	    }
+	    elseif($_SESSION['type']!="customer"){
+	    	header('location: welcome.php');
+	    }
+
 		if ( !empty($_POST) ) {
-			$customer_id = $_POST['customer_id'];
-			$classtype = $_POST['classtype'];
-			$ticket_value = $_POST['ticket_value'];
-			$scheduler_id = $_POST['scheduler_id'];
-			$seat_no = $_POST['seat_no'];
 			$database = new DbConnect();	
 			$databaseconnect = $database->connect();
+			$customer_id = mysqli_real_escape_string($databaseconnect, $_POST['customer_id']);
+			$classtype = mysqli_real_escape_string($databaseconnect, $_POST['classtype']);
+			$ticket_value = mysqli_real_escape_string($databaseconnect, $_POST['ticket_value']);
+			$scheduler_id = mysqli_real_escape_string($databaseconnect, $_POST['scheduler_id']);
+			$seat_no = mysqli_real_escape_string($databaseconnect, $_POST['seat_no']);
+			
 			$sql1 = "SELECT * FROM class WHERE class_type = '$classtype'";
 			$result = mysqli_query($databaseconnect,$sql1);
 			while($row = mysqli_fetch_array($result)){
@@ -39,9 +51,17 @@
 }
 	</style>
 	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">	
+	<link href="css.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+	<div class="navBar">
+		<ul>
+		  <li><a href="index.php">Home</a></li>
+		  <li><a href="flightscheduler.php">Flight Scheduler</a></li>
+		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
+		</ul>
+	</div>
 	<h1>Select a Seat </h1>
 	<h2>Sheduler ID</h2> 
 	<?php 
@@ -92,7 +112,7 @@
 	                    <td><?php  echo $row["state"];  ?></td>
 	                    <?php
 	                    if($row["state"]=='Available'){?>
-		                    <td><a class="button" href="/AirlineDMBS/AirlineDBMS/seatbooking.php?sid=<?php echo $sid?>&seatno=<?php echo $row["seat_no"]?>">Add to Cart </a></td>
+		                    <td><a class="button" href="seatbooking.php?sid=<?php echo $sid?>&seatno=<?php echo $row["seat_no"]?>">Add to Cart </a></td>
 	                	<?php } ?>
 	                	
 	            	</tr><?php
@@ -128,7 +148,7 @@
 				?>
 			</tbody>
 		</table>
-		<a class="button" href="/AirlineDMBS/AirlineDBMS/booking.php?sid=<?php echo $sid?>&seatno=<?php echo $row["seat_no"]?>">Book</a>
+		<a class="button" href="booking.php?sid=<?php echo $sid?>&seatno=<?php echo $row["seat_no"]?>">Book</a>
 	</div>
 	</div>
 </div>
