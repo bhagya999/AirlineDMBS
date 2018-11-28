@@ -6,6 +6,8 @@
 -- Generation Time: Nov 27, 2018 at 04:01 PM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 7.2.11
+CREATE DATABASE airlinedbms;
+USE airlinedbms;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
