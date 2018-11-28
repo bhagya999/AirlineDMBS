@@ -12,13 +12,14 @@
 <body>
 	<div class="navBar">
 		<ul>
-		  <li><a href="#home">Home</a></li>
+		  <li><a href="index.php">Home</a></li>
 		  <li><a class="active" href="">Aeroplane Types</a></li>
-		  <li><a href="#contact">Contact</a></li>
-		  <li style="float:right"><a href="#about">About</a></li>
+		  <!-- <li><a href="booking.php">Booking</a></li> -->
+		  <!-- <li><a href="flightscheduler.php">Flight Scheduler</a></li> -->
+		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
 		</ul>
 	</div>
-	<h1>Aero Plane Types <a href="logout.php"><button>Log Out</button></a></h1> 
+	<h1>Aero Plane Types </h1> 
 	
 	
 	<table>

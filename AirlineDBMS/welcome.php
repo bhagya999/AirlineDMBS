@@ -7,11 +7,11 @@
   <link href="css.css" rel="stylesheet" type="text/css">
   <style type="text/css">
   body {
-    background: #76b852; /* fallback for old browsers */
-    background: -webkit-linear-gradient(right, #76b852, #8DC26F);
+    background: #418491; /* fallback for old browsers */
+    /*background: -webkit-linear-gradient(right, #76b852, #8DC26F);
     background: -moz-linear-gradient(right, #76b852, #8DC26F);
     background: -o-linear-gradient(right, #76b852, #8DC26F);
-    background: linear-gradient(to left, #76b852, #8DC26F);
+    background: linear-gradient(to left, #76b852, #8DC26F);*/
     font-family: "Roboto", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;      
@@ -74,7 +74,7 @@
             <button class="mainbutton" type= "submit">log</button>
           </form>
           
-          <p class="message">Not registered? <button onclick="signup1()">Open Account</button></p>
+          <p class="message">Not registered? <button class="button" onclick="signup1()">Open Account</button></p>
         </div>
       </div>
     </div>
@@ -92,7 +92,7 @@
             <button class="mainbutton" type= "submit">create</button>
           </form>
           
-          <p class="message">Already registered? <button onclick="login()">Log In</button></p>
+          <p class="message">Already registered? <button class="button" onclick="login()">Log In</button></p>
         </div>
       </div>
     </div>
