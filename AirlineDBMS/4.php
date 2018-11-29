@@ -24,7 +24,7 @@
 	<div class="navBar">
 		<ul>
 		  
-		  <li><a href="">Aeroplane Types</a></li>
+		  <li><a href="aeroplane_types.php">Aeroplane Types</a></li>
 		  <li><a href="flight.php">Flights</a></li>
 		  <li><a href="scheduler_add.php">Update scheduler</a></li>
 		  <li><a href="1.php">Report 1</a></li>
