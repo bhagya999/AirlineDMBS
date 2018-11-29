@@ -71,7 +71,7 @@ if(isset($_POST["submit"]) )
 	
 	if ($y == 3){
 			$result = mysqli_query($databaseconnect,$query1);
-			echo mysqli_error($databaseconnect);
+			
 		
 		
 			echo "<table class= 'table-bordered'>";

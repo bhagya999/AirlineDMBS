@@ -66,7 +66,7 @@ if(isset($_POST["submit"]) )
 	$query1 = "SELECT * FROM flight_scheduler NATURAL JOIN flightview NATURAL JOIN route NATURAL JOIN passengercount WHERE flight_from = '{$x}' AND flight_to = '{$y}'";
 
 	$result = mysqli_query($databaseconnect,$query1);
-		
+	echo mysqli_error($databaseconnect);
 			
 			echo "<table class= 'table-bordered'>";
 			echo"<th>"; echo" Flight From"; echo"</th>";

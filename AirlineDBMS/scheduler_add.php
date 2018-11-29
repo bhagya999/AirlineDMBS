@@ -46,18 +46,19 @@ session_start();
 		    die("Connection failed: " . $conn->connect_error);
 		} 
 
-		$sql2 = "INSERT INTO flight_scheduler VALUES ($schedulerID, $flightID, $flightDate,'Not Delayed', $planeID)";
-					$result2 = $conn->query($sql2);
-		
+		$sql2 = "INSERT INTO flight_scheduler VALUES ('{$schedulerID}', '{$flightID}', '{$flightDate}','Not Delayed', '{$planeID}')";
+		$result2 = $conn->query($sql2);
+		// echo "Working";
 		$sql = "SELECT no_of_seats FROM plane NATURAL JOIN aeroplane_type WHERE plane_id = $planeID ";
 		$result = $conn->query($sql);
+		echo mysqli_error($conn);
 
 		if ($result->num_rows > 0) {
 		    // output data of each row
 		    while($row = $result->fetch_assoc()) {
 		        
 				for ($x = 1; $x <= $row["no_of_seats"]; $x++) {
-				    $sql1 = "INSERT INTO seat VALUES ($schedulerID, $x, 00, 'Available')";
+				    $sql1 = "INSERT INTO seat VALUES ($schedulerID, $x, 1, 'Available')";
 					$result1 = $conn->query($sql1);
 				} 
 		    }

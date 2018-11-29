@@ -1,1 +1,0 @@
-INSERT INTO `customer`(`customer_id`, `first_name`, `last_name`, `address`, `email`, `user_name`, `password`, `package_type`) VALUES (189,"","","","bhagya@123.com","","","")
