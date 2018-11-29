@@ -25,10 +25,10 @@
 	<div class="navBar">
 		<ul>
 		  
-		  <li><a class="active" href="">Aeroplane Types</a></li>
+		  <li><a href="">Aeroplane Types</a></li>
 		  <li><a href="flight.php">Flights</a></li>
 		  <li><a href="scheduler_add.php">Update scheduler</a></li>
-		  <li><a href="1.php">Report 1</a></li>
+		  <li><a class="active" href="1.php">Report 1</a></li>
 		  <li><a href="2.php">Report 2</a></li>
 		  <li><a href="3.php">Report 3</a></li>
 		  <li><a href="4.php">Report 4</a></li>
