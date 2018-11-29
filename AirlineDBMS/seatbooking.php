@@ -70,13 +70,12 @@
 		
 	}
 	$sid = $_GET['sid'];
-	echo $_SESSION['scheduler_id'];
+	?><h2><?php echo $_SESSION['scheduler_id'];?></h2><?php
 	if(isset($_GET['seatno']) & !empty($_GET['seatno'])){
 		if(isset($_SESSION['cart']) & !empty($_SESSION['cart'])){
 			$items = $_SESSION['cart'];
 			$cartitems = explode(",", $items);
 			if(in_array($_GET['seatno'], $cartitems)){
-				echo "Already Booked";
 			}else{
 				$items .= "," . $_GET['seatno'];
 				$_SESSION['cart'] = $items;
@@ -86,8 +85,6 @@
 			$items = $_GET['seatno'];
 			$_SESSION['cart'] = $items;
 		}
-	}else{
-		echo "Need to select a seat";
 	}
 	?>
 	<div class = "container">

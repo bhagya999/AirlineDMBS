@@ -120,6 +120,7 @@
       
       $user_name = mysqli_real_escape_string($databaseconnect,$_POST['userName']);
       $password = mysqli_real_escape_string($databaseconnect,$_POST['password']);
+      $password = sha1($password);
       
       
 

@@ -1020,6 +1020,30 @@ INSERT INTO `user` (`id`, `user_name`, `password`) VALUES
 ('u-19', 'dulaj', 'dulaj'),
 ('u-567', 'user_name', 'password');
 
+DELIMITER $$
+CREATE TRIGGER `before_user_insert` BEFORE INSERT ON `user` FOR EACH ROW BEGIN
+  declare msg varchar(128);
+  declare passwordtemp varchar(40);
+  IF length(trim(new.id)) = 0 THEN
+  set msg = "Invalid id";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
+  IF length(trim(new.password)) = 0 THEN
+  set msg = "Invalid password";
+    signal sqlstate '45000' set message_text = msg;
+  ELSE
+    set passwordtemp = sha1(new.password);
+    set new.password = passwordtemp;
+  end if;
+  
+  IF new.user_name REGEXP '[^a-zA-Z]+$' or length(trim(new.user_name)) = 0 THEN
+  set msg = "Invalid user_name";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
+  
+END
+$$
+DELIMITER ;
 -- --------------------------------------------------------
 
 --
