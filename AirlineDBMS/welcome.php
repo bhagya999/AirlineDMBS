@@ -48,7 +48,7 @@
       $flag = true;
 
       $sqlf = "INSERT INTO customer(id,first_name,last_name,address,email,package_type) VALUES ('$customer_id','$first_name','$last_name','$address','$email_address','Guest')";
-      $sqlf1 = "INSERT INTO user(id,password,user_name) VALUES ('$customer_id','$password','$user_name')";
+      $sqlf1 = "INSERT INTO user(id,password,user_name,type) VALUES ('$customer_id','$password','$user_name','customer')";
 
       $result = mysqli_query($databaseconnect,$sqlf);
       if(!$result){
@@ -83,11 +83,11 @@
       if($count){
         $result = $result1->fetch_assoc();
         $id=$result['id'];
-        if($id[0]==u){
+        if($result['type']=='customer'){
           $_SESSION["id"] = $id;
           $_SESSION["type"] = 'customer';
           header('location: flightscheduler.php');
-        }elseif($id[0]==a){
+        }elseif($result['type']=='admin'){
           $_SESSION["id"] = $id;
           $_SESSION["type"] = 'admin';
           header('location: flight.php');
