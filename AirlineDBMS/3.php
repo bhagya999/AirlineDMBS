@@ -35,6 +35,7 @@
 		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
 		</ul>
 	</div>
+	<h4>3) Given a date range, number of bookings by each passenger type.</h4>
 	<?php $x; ?>
 	<?php $y; ?>
 	<?php $query; ?>

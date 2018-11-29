@@ -35,6 +35,7 @@
 		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
 		</ul>
 	</div>
+	<h4>2) Given a date range, number of passengers travelling to a given destination.</h4>
 	<?php $x; ?>
 	<?php $y; ?>
 	<?php $query; ?>

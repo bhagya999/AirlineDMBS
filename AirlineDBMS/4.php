@@ -35,6 +35,7 @@
 		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
 		</ul>
 	</div>
+	<h4>4) Given origin and destination, all past flights, states, passenger counts data.</h4>
 	<?php $x; ?>
 	<?php $y; ?>
 	<?php $query; ?>

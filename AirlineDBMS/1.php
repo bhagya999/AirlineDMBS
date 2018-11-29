@@ -36,6 +36,8 @@
 		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
 		</ul>
 	</div>
+	<h4>1) Given a flight no, all passengers travelling in it (next immediate flight) below age 18,
+above age 18.</h4>
 	<?php $x; ?>
 	<?php $y; ?>
 	<?php $query; ?>
