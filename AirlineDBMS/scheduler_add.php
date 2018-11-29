@@ -15,10 +15,15 @@ session_start();
 <body>
 	<div class="navBar">
 		<ul>
-		  <li><a href="index.php">Home</a></li>
+		  
 		  <li><a href="aeroplane_types.php">Aeroplane Types</a></li>
 		  <li><a href="flight.php">Flights</a></li>
 		  <li><a  class="active" href="scheduler_add.php">Update scheduler</a></li>
+		  <li><a href="1.php">Report 1</a></li>
+		  <li><a href="2.php">Report 2</a></li>
+		  <li><a href="3.php">Report 3</a></li>
+		  <li><a href="4.php">Report 4</a></li>
+		  <li><a href="5.php">Report 5</a></li>
 		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
 		</ul>
 	</div>

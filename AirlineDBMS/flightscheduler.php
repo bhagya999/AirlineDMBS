@@ -32,7 +32,7 @@
 <body>
 	<div class="navBar">
 		<ul>
-		  <li><a href="index.php">Home</a></li>
+		  
 		  <li><a class="active" href="flightscheduler.php">Flight Scheduler</a></li>
 		  <li style="float:right"><a class="logout" href="logout.php">Log Out</a></li>
 		</ul>

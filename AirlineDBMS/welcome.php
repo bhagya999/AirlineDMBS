@@ -37,82 +37,35 @@
       $email_address = mysqli_real_escape_string($databaseconnect, $_POST['email']);
       $user_name = mysqli_real_escape_string($databaseconnect, $_POST['userName']);
       $password = mysqli_real_escape_string($databaseconnect, $_POST['password']);
+      $password = sha1($password);
       
       $sql1 = "SELECT * FROM customer";
       $result1 = mysqli_query($databaseconnect,$sql1);
       $count = mysqli_num_rows($result1)+1;
       $customer_id = "u-"."$count";
+
+      mysqli_autocommit($databaseconnect,false);
+      $flag = true;
+
       $sqlf = "INSERT INTO customer(id,first_name,last_name,address,email,package_type) VALUES ('$customer_id','$first_name','$last_name','$address','$email_address','Guest')";
       $sqlf1 = "INSERT INTO user(id,password,user_name) VALUES ('$customer_id','$password','$user_name')";
 
       $result = mysqli_query($databaseconnect,$sqlf);
-      $result1 = mysqli_query($databaseconnect,$sqlf1);
-      if($result1){
-        echo"<h4 align= 'center'>Susccusfully Registred</h4>";
-      }else{
-        echo("<h4 align='center'>".'Error description: ' . mysqli_error($databaseconnect)."</h4>");
-        echo("<style type='text/css'>
-.signin{
-    display: none;
- }
- .signup{
-    display: block;
- }
- </style>");
+      if(!$result){
+        $flag = false;
+        echo "Error details".mysqli_error($databaseconnect).".";
       }
-
-       // try {
-      //     mysql_query("BEGIN");
-
-      //     $a1=mysql_query("INSERT INTO customer(id,first_name,last_name,address,email,package_type) VALUES ('$customer_id','$first_name','$last_name','$address','$email_address','Guest')");
-      //     $a2=mysql_query("INSERT INTO user(id,password,user_name) VALUES ('$customer_id','$password','$user_name')");
-
-      //     // If we arrive here, it means that no exception was thrown
-      //     // i.e. no query has failed, and we can commit the transaction
-      //     mysql_query("COMMIT");
-      //     echo"<h4 align= 'center'>Susccusfully Registred</h4>";
-      // } catch (Exception $e) {
-      //     // An exception has been thrown
-      //     // We must rollback the transaction
-      //     mysql_query("ROLLBACK");
-      //     echo("<h4 align='center'>".'Error description: ' . mysqli_error($databaseconnect)."</h4>");
-      //     echo("<style type='text/css'>
-      //         .signin{
-      //             display: none;
-      //          }
-      //          .signup{
-      //             display: block;
-      //          }
-      //          </style>");
-      //               }
-
-      // $sqlf0 = "BEGIN TRANSACTION [Tran1]
-      //           BEGIN TRY 
-      //               INSERT INTO customer(id,first_name,last_name,address,email,package_type) VALUES ('$customer_id','$first_name','$last_name','$address','$email_address','Guest')
-
-      //               INSERT INTO user(id,password,user_name) VALUES ('$customer_id','$password','$user_name')
-
-      //               COMMIT TRANSACTION [Tran1]
-
-      //           END TRY
-
-      //           BEGIN CATCH
-
-      //               ROLLBACK TRANSACTION [Tran1]
-
-      //           END CATCH ";
-      // $sqlf = "INSERT INTO customer(id,first_name,last_name,address,email,package_type) VALUES ('$customer_id','$first_name','$last_name','$address','$email_address','Guest')";
-      // $sqlf1 = "INSERT INTO user(id,password,user_name) VALUES ('$customer_id','$password','$user_name')";
-
-     
-      // $result = mysqli_query($databaseconnect,$sqlf);
-      // $result1 = mysqli_query($databaseconnect,$sqlf0);
-
-      // if($result1){
-        
-      // }else{
-        
-      // }
+      $result1 = mysqli_query($databaseconnect,$sqlf1);
+      if(!$result1){
+        $flag = false;
+        echo "Error details".mysqli_error($databaseconnect).".";
+      }
+      if($flag){
+        mysqli_commit($databaseconnect);
+      }else{
+        mysqli_rollback($databaseconnect);
+        echo "<h4 align='center'>All queries were rolled back</h4>";
+      }
     }elseif (isset($_POST['userName'])) {
 
       $database = new DbConnect();  
