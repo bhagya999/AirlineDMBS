@@ -37,7 +37,7 @@
       $email_address = mysqli_real_escape_string($databaseconnect, $_POST['email']);
       $user_name = mysqli_real_escape_string($databaseconnect, $_POST['userName']);
       $password = mysqli_real_escape_string($databaseconnect, $_POST['password']);
-      $password = sha1($password);
+      
       
       $sql1 = "SELECT * FROM customer";
       $result1 = mysqli_query($databaseconnect,$sql1);
