@@ -1073,6 +1073,7 @@ DELIMITER $$
 CREATE TRIGGER `before_user_insert` BEFORE INSERT ON `user` FOR EACH ROW BEGIN
   declare msg varchar(128);
   declare passwordtemp varchar(40);
+  declare userlist varchar(40);
   IF length(trim(new.id)) = 0 THEN
   set msg = "Invalid id";
     signal sqlstate '45000' set message_text = msg;
@@ -1086,6 +1087,11 @@ CREATE TRIGGER `before_user_insert` BEFORE INSERT ON `user` FOR EACH ROW BEGIN
   end if;
   
   IF new.user_name REGEXP '[^a-zA-Z]+$' or length(trim(new.user_name)) = 0 THEN
+  set msg = "Invalid user_name";
+    signal sqlstate '45000' set message_text = msg;
+  end if;
+  select user_name into userlist from user where user_name=new.user_name limit 1;
+  IF not length(userlist)=0 THEN
   set msg = "Invalid user_name";
     signal sqlstate '45000' set message_text = msg;
   end if;
